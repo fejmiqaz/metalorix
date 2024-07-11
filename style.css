@@ -3,6 +3,9 @@ body {
     margin-left: 72px;
     width: auto;
     height: auto;
+    display: grid;
+    justify-content: center;
+    align-items: center;
 }
 
 #sidebar {
