@@ -1,23 +1,28 @@
 // sidebar.js
 
 document.addEventListener('DOMContentLoaded', function() {
+    
     const sidebar = document.getElementById('sidebar');
+    const toggleButton = document.getElementById('menu-toggle'); // Assuming there's a button with this ID
 
-    sidebar.addEventListener('mouseover', function() {
-        sidebar.style.transform = 'translateX(0)';
+    let lastScrollTop = 0;
+
+    // Toggle sidebar visibility
+    toggleButton.addEventListener('click', function() {
+        sidebar.classList.toggle('open');
     });
 
-    sidebar.addEventListener('mouseleave', function() {
-        sidebar.style.transform = 'translateX(-75%)';
-    });
-    // Handle touch events for mobile
-    sidebar.addEventListener('touchstart', function() {
-        sidebar.style.transform = 'translateX(0)';
-    });
+    // Show/hide sidebar on scroll
+    window.addEventListener('scroll', function() {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
-    document.addEventListener('touchend', function(event) {
-        if (!sidebar.contains(event.target)) {
-            sidebar.style.transform = 'translateX(-75%)';
+        if (currentScroll > lastScrollTop) {
+            // Scroll down
+            sidebar.classList.remove('open');
+        } else {
+            // Scroll up
+            sidebar.classList.add('open');
         }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
     });
 });
