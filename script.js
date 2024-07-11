@@ -8,9 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastScrollTop = 0;
 
     // Toggle sidebar visibility
-    toggleButton.addEventListener('click', function() {
-        sidebar.classList.toggle('open');
-    });
+    // toggleButton.addEventListener('click', function() {
+    //     sidebar.classList.toggle('open');
+    // });
 
     // Show/hide sidebar on scroll
     window.addEventListener('scroll', function() {
