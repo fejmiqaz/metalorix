@@ -1,16 +1,15 @@
-// sidebar.js
-
+// SIDEBAR.JS
 document.addEventListener('DOMContentLoaded', function() {
-    
+
     const sidebar = document.getElementById('sidebar');
     const toggleButton = document.getElementById('menu-toggle'); // Assuming there's a button with this ID
 
     let lastScrollTop = 0;
 
     // Toggle sidebar visibility
-    // toggleButton.addEventListener('click', function() {
-    //     sidebar.classList.toggle('open');
-    // });
+    toggleButton.addEventListener('click', function() {
+        sidebar.classList.toggle('open');
+    });
 
     // Show/hide sidebar on scroll
     window.addEventListener('scroll', function() {
@@ -25,4 +24,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
     });
+
+    //ABOUT SECTION SLIDE IN
+    window.addEventListener('load', function () {
+        const aboutSection = document.getElementById('home');
+        aboutSection.classList.add('show');
+    })
 });
