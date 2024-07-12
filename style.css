@@ -1,7 +1,5 @@
 body {
-    background-color: #E6E6FA;
-    margin-left: 72px;
-    width: auto;
+    background-color: #01204c;
     height: auto;
     display: grid;
     justify-content: center;
@@ -17,7 +15,7 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow for sidebar */
     transition: transform 0.3s ease;
     z-index: 1000; /* Ensure sidebar is above other content */
-    background-color: #733E6A;
+    background-color: white;
     transform: translateY(-100%); /* Hidden by default */
     display: flex;
     justify-content: space-between;
@@ -58,59 +56,67 @@ body {
 
 #sidebar ul li a {
     font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
-    padding: 5px;
+    padding: 10px;
     display: block;
     text-decoration: none;
-    color: #E6E6FA; /* Link text color */
+    color: #01204c; /* Link text color */
     font-size: 25px;
 }
 
 #sidebar ul li a:hover {
-    background-color: #733E6A; /* Background color on hover */
+    background-color: #01204c; /* Background color on hover */
     color: #FFFDD0; /* Text color on hover */
+    padding: 10px;
     border-radius: 25px;
     font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
 }
 
 #sidebar #menu-toggle {
-    background-color: #733E6A;
-    width: 100px;
+    background-color: #01204c;
+    width: 70px;
     color: white;
     font-size: 15px;
     border: 1px white solid;
     border-radius: 25px
 }
 
-#about div {
+#home{
+    position: relative;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: transform 1s ease-in, opacity 1s ease-out;
+    justify-content: center;
+    align-items: center;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 80px;
-}
-
-#about div div {
-    justify-content: center;
-    display: grid;
-    align-items: center;
     width: 100%;
-
+    height: 100vh;
+    overflow: hidden;
 }
 
-#about div div h1 {
-    font-size: 50px;
-    text-align: center;
-    color: #733E6A;
-    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+#home.show {
+    opacity: 1;
+    transform: translateX(0);
 }
 
-#about div div p {
-    text-align: center;
-    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
-    font-weight: normal;
-    color: #733E6A;
-    font-size: 20px;
-    text-justify: auto;
+#home img {
+    margin-top: 105px;
+    width: 100%;
+    height: auto;
 }
+
+#about {
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-top: -75px
+}
+#about img {
+    width: 100%;
+    height: auto;
+}
+
 
 #posts {
 }
@@ -131,7 +137,7 @@ body {
 
 #posts div h1 {
     font-size: 30px;
-    color: #733E6A;
+    color: white;
     font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
 }
 
@@ -142,12 +148,12 @@ body {
 }
 
 #merchandise div h1 {
-    color: #733E6A;
+    color: white;
     font-size: 50px;
 }
 
 #merchandise div h2 {
-    color: #733E6A;
+    color: white;
     font-size: 25px;
 }
 
@@ -173,7 +179,7 @@ body {
         top: 0;
         left: 0;
         z-index: 1000; /* Ensure sidebar is above other content */
-        background-color: #733E6A;
+        background-color: white;
     }
 
     #sidebar.open {
@@ -206,13 +212,13 @@ body {
         font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
         display: block;
         text-decoration: none;
-        color: #E6E6FA;
+        color: #01204c;
         padding-inline: 0;/* Link text color */
     }
 
     #sidebar ul li a:hover {
-        background-color: #733E6A; /* Background color on hover */
-        color: #FFFDD0; /* Text color on hover */
+        background-color: white; /* Background color on hover */
+        color: #01204c; /* Text color on hover */
         border-radius: 25px;
     }
 
@@ -224,22 +230,29 @@ body {
         z-index: 1100; /* Ensure button is above sidebar */
     }
 
-    #about div {
-        margin-top: 120px; /* Adjust to make room for fixed sidebar */
-        padding: 10px;
+    #home {
+        width: 100%;
+        height: 100vh;
+        background-image: url("assets/homeMetalorixPhone.png");
+        background-size: cover;
     }
 
-    #about div div {
-        width: 95%;
-        margin: 20px auto;
+    #home img {
+        width: 100%;
+        opacity: 0;
     }
 
-    #about div div h1 {
-        font-size: 2em;
+    #about {
+        width: 100%;
+        height: 100vh;
+        margin-top: 50px;
+        background-image: url(" assets/aboutMetalorixPhone.png");
+        background-size: cover;
     }
 
-    #about div div p {
-        font-size: 1em;
+    #about img {
+        width: 100%;
+        opacity: 0;
     }
 
     #posts div {
