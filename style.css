@@ -54,8 +54,9 @@ body {
     padding: 10px 15px;
 }
 
+
 #sidebar ul li a {
-    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+    font-family: "Smooch Sans", serif;
     padding: 10px;
     display: block;
     text-decoration: none;
@@ -67,8 +68,8 @@ body {
     background-color: #01204c; /* Background color on hover */
     color: #FFFDD0; /* Text color on hover */
     padding: 10px;
-    border-radius: 25px;
-    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+    border-radius: 15px;
+    font-family: "Smooch Sans", serif;
 }
 
 #sidebar #menu-toggle {
@@ -80,28 +81,56 @@ body {
     border-radius: 25px
 }
 
-#home{
+#home {
     position: relative;
     opacity: 0;
     transform: translateX(100%);
     transition: transform 1s ease-in, opacity 1s ease-out;
     justify-content: center;
     align-items: center;
-    display: flex;
     width: 100%;
     height: 100vh;
     overflow: hidden;
+    color: white;
+    display: flex;
+    margin: 0;
 }
 
 #home.show {
     opacity: 1;
     transform: translateX(0);
 }
+#home #homeContainer {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 
-#home img {
-    margin-top: 105px;
-    width: 100%;
-    height: auto;
+#home #homeContainer * {
+    margin: 5px;
+    font-family: "Smooch Sans", serif;
+}
+
+#home #homeContainer h1 span {
+    font-size: 180px;
+    background-image: url(assets/welcomeBackground.jpg);
+    background-size: cover;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-family: "Jersey 15", serif;
+    display: inline-block;
+}
+
+#home #homeContainer h2 span {
+    font-size: 80px;
+    font-family: "Smooch Sans", serif;
+
+}
+#home #homeContainer h3 span {
+    font-size: 55px;
+    font-family: "Smooch Sans", serif;
 }
 
 #about {
@@ -122,18 +151,37 @@ body {
     justify-content: center;
     margin-top: 20px;
     width: 100%;
-    height: 100%;
+    height: auto;
 }
 
 #posts div div {
-    height: 100%;
-    padding-inline: 5px;
+    width: calc(50% - 10px);
+    height: auto;
+    margin-inline: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
 }
 
 #posts div h1 {
-    font-size: 30px;
+    font-size: 80px;
     color: white;
-    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+    font-family: "Smooch Sans", serif;
+}
+
+@media (max-width: 50vw) {
+    #posts div {
+        flex-direction: column;/* Stack child elements vertically */
+        justify-content: flex-start;
+    }
+    #posts div div {
+        width: 100%/* Ensure nested divs span the full width */
+    }
+    #posts div h1 {
+        font-size: 24px; /* Reduce font size for smaller screens */
+    }
 }
 
 #merchandise div {
@@ -144,12 +192,14 @@ body {
 
 #merchandise div h1 {
     color: white;
-    font-size: 50px;
+    font-family: "Smooch Sans", serif;
+    font-size: 80px;
 }
 
 #merchandise div h2 {
     color: white;
-    font-size: 25px;
+    font-family: "Smooch Sans", serif;
+    font-size: 45px;
 }
 
 /* FIT FOR PHONE SCREENS */
