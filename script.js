@@ -55,26 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 2500);
 });
 
-// Custom Cursor
-document.addEventListener('mousemove', function(e) {
-    const cursor = document.querySelector('.cursor');
-    const cursorFollower = document.querySelector('.cursor-follower');
-
-    // Show cursors after first mouse movement
-    if (cursor.style.opacity === '') {
-        cursor.style.opacity = '1';
-        cursorFollower.style.opacity = '1';
-    }
-
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-
-    setTimeout(function() {
-        cursorFollower.style.left = e.clientX + 'px';
-        cursorFollower.style.top = e.clientY + 'px';
-    }, 50);
-});
-
 // Cursor hover effect on interactive elements
 document.querySelectorAll('a, button').forEach(item => {
     item.addEventListener('mouseenter', function() {
