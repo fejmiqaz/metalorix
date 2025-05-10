@@ -277,7 +277,7 @@ section {
 }
 .brand-text {
     font-family: 'Georgia', serif;
-    font-size: 5rem;
+    font-size: 7rem;
     letter-spacing: 1px;
     margin-bottom: 1.5rem;
     display: flex;
@@ -293,7 +293,7 @@ section {
 .motto-text {
     font-family: 'Helvetica', sans-serif;
     font-weight: 400;
-    font-size: 1.5rem;
+    font-size: 2rem;
     margin-bottom: 3rem;
     display: flex;
     justify-content: center;
@@ -437,10 +437,15 @@ section {
 .about-text p {
     margin-bottom: 1.5rem;
     line-height: 1.7;
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
+    font-family: 'Georgia', serif; /* Add this line for a better font */
+    text-align: center; /* This ensures text is centered */
+    margin-left: auto; /* These two margin properties help */
+    margin-right: auto; /* with horizontal centering */
+    max-width: 90%; /* Optional: limits width for better readability */
 }
 .highlight {
     color: var(--accent-color);
@@ -497,7 +502,7 @@ section {
     text-align: center;
 }
 .visual-caption {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     color: rgba(64, 46, 50, 0.8);
     text-align: center;
 }
