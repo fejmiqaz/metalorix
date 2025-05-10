@@ -18,6 +18,7 @@ body {
     color: var(--text-color);
     overflow-x: hidden;
     scroll-behavior: smooth;
+    width: 100%;
 }
 /* Loader */
 .loader {
@@ -44,6 +45,7 @@ body {
     letter-spacing: 0.5px;
     margin-bottom: 2rem;
     display: flex;
+    justify-content: center;
     text-shadow: 0 0 8px var(--accent-glow);
 }
 .loader-text span {
@@ -72,7 +74,6 @@ body {
     0% { width: 0; }
     100% { width: 100%; }
 }
-/* Custom Cursor - Removed */
 /* Noise Overlay */
 .noise-overlay {
     position: fixed;
@@ -128,6 +129,9 @@ nav {
 nav ul {
     list-style: none;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .nav-link {
     display: block;
@@ -139,6 +143,8 @@ nav ul {
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    text-align: center;
+    width: 100%;
 }
 .nav-link:before {
     content: '';
@@ -167,6 +173,7 @@ nav ul {
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
     padding-left: 2rem;
     transform: translateY(100%);
     transition: transform 0.4s cubic-bezier(0.7, 0, 0.3, 1);
@@ -212,6 +219,9 @@ main {
     min-height: 100vh;
     width: 100%;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 section {
     min-height: 100vh;
@@ -220,16 +230,20 @@ section {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 4rem 2rem;
+    padding: 4rem 0;
     overflow: hidden;
 }
 .section-container {
+    width: 80%;
     max-width: 1200px;
-    width: 100%;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1rem;
     position: relative;
     z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 /* Home Section */
 #home {
@@ -241,6 +255,10 @@ section {
     text-align: center;
     position: relative;
     z-index: 5;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .welcome-text {
     font-family: 'Helvetica', sans-serif;
@@ -393,6 +411,7 @@ section {
     position: relative;
     display: inline-block;
     text-shadow: 0 0 5px var(--accent-glow);
+    align-self: center;
 }
 .section-title::before {
     content: attr(data-text);
@@ -408,9 +427,12 @@ section {
     display: flex;
     gap: 4rem;
     align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 .about-text {
     flex: 1;
+    text-align: center;
 }
 .about-text p {
     margin-bottom: 1.5rem;
@@ -444,7 +466,8 @@ section {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 1rem;
+    margin: 0 auto 1rem;
+    overflow: visible;
 }
 .progress-ring-circle {
     stroke: var(--accent-color);
@@ -455,10 +478,14 @@ section {
     transform-origin: 50% 50%;
     transition: stroke-dashoffset 2s ease;
     filter: drop-shadow(0 0 3px var(--accent-glow));
+    width: 100%;
+    height: 100%;
 }
 .progress-ring-circle-bg {
     stroke: rgba(64, 46, 50, 0.1);
     fill: transparent;
+    width: 100%;
+    height: 100%;
 }
 .percentage-text {
     position: absolute;
@@ -466,24 +493,33 @@ section {
     font-weight: 700;
     color: var(--accent-color);
     text-shadow: 0 0 8px var(--accent-glow);
+    width: auto;
+    text-align: center;
 }
 .visual-caption {
     font-size: 1.2rem;
     color: rgba(64, 46, 50, 0.8);
+    text-align: center;
 }
 /* Posts Section */
 #posts {
     background-color: var(--dark-bg);
+    width: 100%;
 }
 .posts-gallery {
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    width: 100%;
     gap: 2rem;
     margin-top: 3rem;
+    padding: 0;
+    box-sizing: border-box;
+    align-items: center;
 }
 .post-item {
+    width: 100%;
+    max-width: 500px;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 8px;
     overflow: hidden;
@@ -491,25 +527,39 @@ section {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     opacity: 0;
     transform: translateY(20px);
+    box-sizing: border-box;
+    text-align: center;
 }
 .post-item:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 0 15px rgba(139, 90, 43, 0.2);
 }
 .post-content {
-    padding: 2rem;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 /* Merchandise Section */
 #merchandise {
     background-color: var(--primary-color);
+    width: 100%;
 }
 .merch-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 2rem;
     margin-top: 3rem;
+    padding: 0 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    justify-items: center;
 }
 .merch-item {
+    width: 100%;
+    max-width: 300px;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 8px;
     overflow: hidden;
@@ -517,6 +567,8 @@ section {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     opacity: 0;
     transform: translateY(20px);
+    box-sizing: border-box;
+    text-align: center;
 }
 .merch-item:hover {
     transform: translateY(-5px);
@@ -600,14 +652,9 @@ section {
     .brand-text {
         font-size: 4rem;
     }
-    .posts-gallery {
-        flex-direction: column;
-        gap: 1.5rem;
-        align-items: center;
-    }
-
-    .post-item {
+    .section-container {
         width: 100%;
+        padding: 1rem;
     }
 }
 @media screen and (max-width: 768px) {
@@ -623,12 +670,9 @@ section {
     .about-text p {
         font-size: 1rem;
     }
-    .posts-gallery {
-        gap: 1rem;
-    }
-
-    .post-item {
+    .section-container {
         width: 100%;
+        padding: 1rem;
     }
 }
 @media screen and (max-width: 576px) {
@@ -642,17 +686,36 @@ section {
         font-size: 2rem;
     }
     .percentage-circle {
-        width: 150px;
-        height: 150px;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 1rem;
     }
     .percentage-text {
         font-size: 2.5rem;
     }
-    .posts-gallery {
-        gap: 0.5rem;
+    section {
+        padding: 3rem 0;
     }
-
-    .post-item {
+    .section-container {
         width: 100%;
+        padding: 0.5rem;
+    }
+    .posts-gallery {
+        padding: 0 0.5rem;
+        flex-wrap: wrap;
+    }
+    .merch-grid {
+        padding: 0 0.5rem;
+    }
+    .visual-element {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .visual-caption {
+        width: 100%;
+        text-align: center;
     }
 }
