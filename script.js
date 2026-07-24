@@ -51,21 +51,21 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Menu Toggle
-document.getElementById('menu-toggle').addEventListener('click', function() {
-    document.getElementById('sidebar').classList.toggle('open');
+const sidebar = document.getElementById('sidebar');
+
+document.getElementById('menu-toggle')?.addEventListener('click', function() {
+    sidebar?.classList.toggle('open');
 });
 
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', function() {
-        document.getElementById('sidebar').classList.remove('open');
+        sidebar?.classList.remove('open');
     });
 });
 
 document.addEventListener('click', function(event) {
-    const sidebar = document.getElementById('sidebar');
     const menuToggle = document.getElementById('menu-toggle');
-
-    if (!sidebar.contains(event.target) && !menuToggle.contains(event.target) && sidebar.classList.contains('open')) {
+    if (sidebar && !sidebar.contains(event.target) && !menuToggle.contains(event.target) && sidebar.classList.contains('open')) {
         sidebar.classList.remove('open');
     }
 });
