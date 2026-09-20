@@ -64,7 +64,7 @@ class ProtectionTests(TestCase):
         self.assertEqual(notification.status, 'failed')
         self.assertEqual(mocked.call_count, 3)
 
-    @override_settings(TURNSTILE_REQUIRED=True, TURNSTILE_SECRET_KEY='secret')
+    @override_settings(TURNSTILE_REQUIRED=True, TURNSTILE_SECRET_KEY='secret', TURNSTILE_SITE_KEY='site')
     @patch('core.protection.urlopen')
     def test_turnstile_checks_hostname_action_and_failure(self, mocked):
         request = RequestFactory().post('/ideas/', {'cf-turnstile-response': 'token'})
@@ -78,3 +78,28 @@ class ProtectionTests(TestCase):
         self.assertFalse(verify_human(request))
         self.assertEqual(self.post().status_code, 400)
         self.assertFalse(Idea.objects.exists())
+
+    @override_settings(TURNSTILE_REQUIRED=True, TURNSTILE_SITE_KEY='', TURNSTILE_SECRET_KEY='')
+    def test_missing_keys_disable_widget_and_submission(self):
+        response = self.client.get('/')
+        self.assertContains(response, 'temporarily unavailable')
+        self.assertNotContains(response, 'challenges.cloudflare.com/turnstile/v0/api.js')
+        self.assertEqual(self.post().status_code, 503)
+        self.assertFalse(Idea.objects.exists())
+
+    @override_settings(IDEA_EMAIL_PROVIDER='resend', RESEND_API_KEY='test-key')
+    @patch('core.notifications.urlopen')
+    def test_resend_https_owner_only(self, mocked):
+        mocked.return_value.__enter__.return_value = BytesIO(b'{"id":"email-123"}')
+        self.assertEqual(self.post().status_code, 302)
+        request = mocked.call_args.args[0]
+        self.assertEqual(request.full_url, 'https://api.resend.com/emails')
+        self.assertEqual(json.loads(request.data)['to'], ['owner@example.com'])
+        self.assertEqual(IdeaNotification.objects.get().status, 'sent')
+
+    @override_settings(IDEA_EMAIL_PROVIDER='resend', RESEND_API_KEY='test-key')
+    @patch('core.notifications.urlopen', side_effect=OSError('unavailable'))
+    def test_resend_failure_preserves_submission(self, mocked):
+        self.assertEqual(self.post().status_code, 302)
+        self.assertEqual(IdeaNotification.objects.get().status, 'pending')
+        self.assertEqual(Idea.objects.count(), 1)

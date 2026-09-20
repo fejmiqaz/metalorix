@@ -47,6 +47,8 @@ INSTAGRAM_USER_ID = os.getenv('INSTAGRAM_USER_ID', '')
 INSTAGRAM_API_VERSION = os.getenv('INSTAGRAM_API_VERSION', 'v25.0')
 IDEA_NOTIFICATIONS_ENABLED = os.getenv('IDEA_NOTIFICATIONS_ENABLED', 'False').lower() == 'true'
 IDEA_NOTIFICATION_EMAIL = os.getenv('IDEA_NOTIFICATION_EMAIL', '')
+IDEA_EMAIL_PROVIDER = os.getenv('IDEA_EMAIL_PROVIDER', 'django')
+RESEND_API_KEY = os.getenv('RESEND_API_KEY', '').strip()
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend' if DEBUG else 'django.core.mail.backends.smtp.EmailBackend')
 EMAIL_HOST = os.getenv('EMAIL_HOST', '')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
@@ -57,8 +59,8 @@ EMAIL_TIMEOUT = 5
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'metalorix@localhost')
 SITE_URL = os.getenv('SITE_URL', 'http://127.0.0.1:8000')
 TURNSTILE_REQUIRED = not DEBUG or os.getenv('TURNSTILE_REQUIRED', 'False').lower() == 'true'
-TURNSTILE_SITE_KEY = os.getenv('TURNSTILE_SITE_KEY', '')
-TURNSTILE_SECRET_KEY = os.getenv('TURNSTILE_SECRET_KEY', '')
+TURNSTILE_SITE_KEY = os.getenv('TURNSTILE_SITE_KEY', '').strip()
+TURNSTILE_SECRET_KEY = os.getenv('TURNSTILE_SECRET_KEY', '').strip()
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True

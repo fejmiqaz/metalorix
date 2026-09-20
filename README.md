@@ -1,5 +1,7 @@
 # metalorix Django app
 
+For the current Render Free deployment, follow [SETUP_LIVE.md](SETUP_LIVE.md) to enable Cloudflare Turnstile and Resend HTTPS owner notifications. This is the recommended setup; the SMTP configuration below is only for hosts that allow SMTP.
+
 ## Run locally
 
 In PowerShell, from `C:\Users\User\Desktop\metalorix`:
@@ -76,14 +78,14 @@ References: https://developers.cloudflare.com/turnstile/get-started/server-side-
 
 ## Render + Neon later
 
-Nothing has been deployed. `render.yaml` defines one paid Starter web service; no Instagram cron job or Render database is created.
+The website is deployed at https://metalorix.site/. `render.yaml` defines one Free web service; no Instagram cron job or Render database is created.
 
 1. Push the project to your chosen repository. Never commit `.env`, `.venv`, `db.sqlite3` or secrets.
 2. Create a Neon PostgreSQL database and copy its connection string, including `sslmode=require` and other supplied security parameters.
 3. Create a Render Blueprint from this repository. Set DATABASE_URL to Neon. The Blueprint generates SECRET_KEY and sets DEBUG=False.
 4. Set ALLOWED_HOSTS to your domain names (no scheme), and CSRF_TRUSTED_ORIGINS to their full HTTPS origins. Render's automatic hostname is also accepted.
 5. Configure Turnstile and the email settings above in Render's environment. Keep notifications off if mail is not ready. Without Turnstile keys the public site loads but idea submissions are rejected.
-6. The build installs packages and collects static files. Pre-deploy applies migrations. Gunicorn serves the app. Create your admin account in Render's shell.
+6. The build installs packages and collects static files. The build command applies migrations. Gunicorn serves the app. Create your admin account in Render's shell.
 7. Test the public form, rate limits, admin image permissions and real mail delivery before pointing the custom domain to Render. Local SQLite records are not copied to Neon automatically.
 
 ## Checks

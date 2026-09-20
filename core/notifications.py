@@ -1,4 +1,6 @@
 import logging
+import json
+from urllib.request import Request, urlopen
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db.models import F
@@ -7,6 +9,26 @@ from django.utils import timezone
 from .models import IdeaNotification
 
 logger = logging.getLogger(__name__)
+
+
+def send_owner_email(subject, body):
+    if settings.IDEA_EMAIL_PROVIDER == 'resend':
+        if not settings.RESEND_API_KEY:
+            raise ValueError('RESEND_API_KEY is missing')
+        payload = json.dumps({'from': settings.DEFAULT_FROM_EMAIL,
+                              'to': [settings.IDEA_NOTIFICATION_EMAIL], 'subject': subject, 'text': body}).encode()
+        request = Request('https://api.resend.com/emails', data=payload, headers={
+            'Authorization': f'Bearer {settings.RESEND_API_KEY}', 'Content-Type': 'application/json',
+            'User-Agent': 'metalorix/1.0'})
+        with urlopen(request, timeout=settings.EMAIL_TIMEOUT) as response:
+            result = json.load(response)
+        if not isinstance(result, dict) or not result.get('id'):
+            raise RuntimeError('Email provider did not accept message')
+        return 1
+    if settings.IDEA_EMAIL_PROVIDER != 'django':
+        raise ValueError('Unsupported IDEA_EMAIL_PROVIDER')
+    return send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
+                     [settings.IDEA_NOTIFICATION_EMAIL], fail_silently=False)
 
 
 def deliver(notification_id):
@@ -24,8 +46,7 @@ def deliver(notification_id):
             f'{idea.description}\n\nReview privately: {link}\n'
             'Images remain in the admin. Sender identity is self-reported.')
     try:
-        sent = send_mail(f'metalorix: new idea #{idea.pk}', body, settings.DEFAULT_FROM_EMAIL,
-                         [settings.IDEA_NOTIFICATION_EMAIL], fail_silently=False)
+        sent = send_owner_email(f'metalorix: new idea #{idea.pk}', body)
         if sent != 1:
             raise RuntimeError('No message accepted')
     except Exception:

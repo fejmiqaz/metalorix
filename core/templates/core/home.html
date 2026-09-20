@@ -39,14 +39,11 @@
     {% for message in messages %}<div class="success" role="status">{{ message }}</div>{% endfor %}
     {% if form.errors %}<div class="errors" role="alert">Please check the fields below.{{ form.non_field_errors }}{{ form.website.errors }}</div>{% endif %}
     {% for field in form.visible_fields %}<div class="field"><label for="{{ field.id_for_label }}">{% if field.name == 'sender_name' or field.name == 'sender_email' %}{{ field.label }}{% elif field.name == 'title' %}Give it a title{% elif field.name == 'song' %}Set the soundtrack{% elif field.name == 'description' %}Describe the emotion / vibe{% else %}Add a little visual inspiration{% endif %}{% if field.field.required %}<span aria-hidden="true"> *</span>{% endif %}</label>{{ field }}{% if field.help_text %}<small id="{{ field.auto_id }}_helptext">{{ field.help_text }}</small>{% endif %}{{ field.errors }}</div>{% endfor %}
-    {% if turnstile_required %}<div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}" data-action="idea"></div><p class="embed-note">Spam protection is provided by Cloudflare Turnstile.</p>{% endif %}<div class="form-foot"><span>No account needed.<br>Just a little imagination.</span><button class="button" type="submit">Send your idea <span>↗</span></button></div>
+    {% if turnstile_required and not turnstile_ready %}<p role="status">Idea submissions are temporarily unavailable. Please check back soon.</p>{% elif turnstile_required %}<div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}" data-action="idea"></div><p class="embed-note">Spam protection is provided by Cloudflare Turnstile.</p>{% endif %}<div class="form-foot"><span>No account needed.<br>Just a little imagination.</span><button class="button" type="submit" {% if turnstile_required and not turnstile_ready %}disabled{% endif %}>Send your idea <span>↗</span></button></div>
   </form>
 </section>
 <section id="shop" class="section shop"><div class="section-top"><div><p class="eyebrow">04 — Objects with intention</p><h2>Carry the <em>mindset.</em></h2></div><span class="pill">IN DEVELOPMENT</span></div><div class="products"><article><span>01 / EVERYDAY ESSENTIAL</span><h3>Minimalist Logo Tee</h3><p>Premium cotton. A quiet statement.</p><div>$29.99 <small>Coming soon</small></div></article><article><span>02 / GO YOUR OWN WAY</span><h3>Signature Cap</h3><p>A familiar reminder, wherever you go.</p><div>$24.99 <small>Coming soon</small></div></article><article><span>03 / MAKE ROOM TO GROW</span><h3>1% Better Journal</h3><p>Small wins deserve a place on paper.</p><div>$19.99 <small>Coming soon</small></div></article></div></section>
 </main>
 <footer><a class="wordmark" href="#home">metalorix</a><span>become 1% better every day</span><a href="https://www.instagram.com/metalorix/" target="_blank" rel="noopener noreferrer">Let’s connect ↗</a></footer>
-<script async src="https://www.instagram.com/embed.js"></script>{% if turnstile_required %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endif %}
+<script async src="https://www.instagram.com/embed.js"></script>{% if turnstile_required and turnstile_ready %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endif %}
 </body></html>
-
-
-

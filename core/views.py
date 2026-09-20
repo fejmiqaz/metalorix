@@ -18,11 +18,14 @@ def home(request, form=None, status=200):
     posts = list(InstagramPost.objects.all()[:3])
     return render(request, 'core/home.html', {'form': form if form is not None else IdeaForm(),
                   'posts': posts or ARCHIVE, 'turnstile_site_key': settings.TURNSTILE_SITE_KEY,
+                  'turnstile_ready': bool(settings.TURNSTILE_SITE_KEY and settings.TURNSTILE_SECRET_KEY),
                   'turnstile_required': settings.TURNSTILE_REQUIRED}, status=status)
 
 
 @require_POST
 def submit_idea(request):
+    if settings.TURNSTILE_REQUIRED and not (settings.TURNSTILE_SITE_KEY and settings.TURNSTILE_SECRET_KEY):
+        return HttpResponse('Idea submissions are temporarily unavailable. Please try again later.', status=503)
     if not verify_human(request):
         return HttpResponse('Verification could not be completed. Reload the page and try again.', status=400)
     form = IdeaForm(request.POST, request.FILES)
