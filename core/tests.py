@@ -22,7 +22,7 @@ def photo():
                              'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'}})
 class SiteTests(TestCase):
     def test_empty_and_latest_three(self):
-        self.assertContains(self.client.get('/'), 'Visit our Instagram')
+        self.assertContains(self.client.get('/'), 'DIwT4qEiE3B')
         for i in range(4):
             InstagramPost.objects.create(instagram_id=str(i), permalink=f'https://www.instagram.com/p/test{i}/',
                                          published_at=timezone.now() + timedelta(days=i))

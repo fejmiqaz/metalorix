@@ -48,3 +48,16 @@ class IdeaImage(models.Model):
     idea = models.ForeignKey(Idea, on_delete=models.CASCADE, related_name='images')
     # Small private references live in the database, surviving Render redeploys.
     data = models.BinaryField()
+
+
+class SubmissionBucket(models.Model):
+    key = models.CharField(max_length=64, primary_key=True)
+    count = models.PositiveIntegerField(default=0)
+    expires_at = models.DateTimeField(db_index=True)
+
+
+class IdeaNotification(models.Model):
+    idea = models.OneToOneField(Idea, on_delete=models.CASCADE)
+    status = models.CharField(max_length=10, default='pending', choices=[('pending', 'Pending'), ('sending', 'Sending'), ('sent', 'Sent'), ('failed', 'Failed')])
+    attempts = models.PositiveIntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)

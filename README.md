@@ -1,10 +1,8 @@
-# metalorix
+# metalorix Django app
 
-A Django version of the original metalorix page, with its cream (`#f6f0e4`), panel (`#ede2cd`), brown (`#34241e`) and clay (`#a9673a`) palette. Includes a responsive homepage, three newest Instagram posts, private idea submissions with reference images, and an admin studio.
+## Run locally
 
-## 1. View it on your computer
-
-Open PowerShell in `C:\Users\User\Desktop\metalorix` and run:
+In PowerShell, from `C:\Users\User\Desktop\metalorix`:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
@@ -12,73 +10,88 @@ Open PowerShell in `C:\Users\User\Desktop\metalorix` and run:
 .\.venv\Scripts\python.exe manage.py runserver
 ```
 
-Visit **http://127.0.0.1:8000/**. Keep the terminal open. Ctrl+C stops the server. Dependencies and the initial database have already been set up in this workspace; normally you only need the last command.
+Open http://127.0.0.1:8000/. Create an admin account with `manage.py createsuperuser` using the same Python executable, then open `/admin/`.
 
-If setting up on another computer, create the environment first with `py -3.13 -m venv .venv`. No activation is necessary with these commands. Local development uses SQLite and needs no cloud accounts. `.env` is optional locally; copy `.env.example` to `.env` when adding credentials. Never commit `.env`.
+Senders shows names, private emails, submission totals, and links to their ideas. Ideas are sorted by sender. Email groups submissions but is self-reported, not verified. Legacy anonymous ideas remain intact. Images remain private to authorized staff and are stored in the database, so Render redeploys do not erase them.
 
-## 2. Review submitted ideas
+## Instagram: manual archive again
 
-Visitors now enter a name and email with each idea. Email addresses are trimmed and lowercased to group repeat submissions. These are self-reported details, not verified identities. The first submitted name is kept; you can correct it in the admin. Two people using the same email are treated as one sender.
+The original three embedded posts are restored when no posts have been entered in the admin. You may manually add posts under Instagram posts (use a unique ID, permalink and publication date); the three newest manual entries appear. The section is labeled as an archive, not a live feed. No Instagram credentials are needed, and the Render sync job has been removed. The old sync command remains dormant for possible future use and is never called automatically.
 
-In the admin, **Senders** lists each sender's name, private email and total ideas; click **View ideas** to see just their submissions. **Ideas** is sorted by sender name, then email, with their newest ideas first. You can filter or search by sender and sort by submission count. Existing anonymous ideas are preserved with no sender; their identity cannot be recovered retroactively.
+## Optional owner email notifications
 
-In a second terminal:
-
-```powershell
-.\.venv\Scripts\python.exe manage.py createsuperuser
-```
-
-Choose your username and password, then visit **http://127.0.0.1:8000/admin/**. Open Ideas to see titles, songs, descriptions and image previews. Mark ideas New, Reviewed, or Inspired a post. Images are accessible only to staff who can view ideas; submissions are never displayed publicly. A submission accepts up to three optional JPEG/PNG/WebP images, 2 MB and 16 megapixels each. Images are resized, re-encoded as JPEG and stripped of metadata.
-
-Small image references are stored directly in the database for a simple initial deployment. This avoids Render's ephemeral filesystem. Watch Neon storage usage and delete old submissions; move to private object storage if volume grows. A one-minute session cooldown and honeypot discourage basic spam; they are not robust abuse prevention. Before a broad public launch, configure edge request-size/rate limits and consider a CAPTCHA. Session cookies can be reset to bypass the cooldown.
-
-## 3. Connect the Instagram feed
-
-Until connected, the latest section shows a link to the Instagram profile. The old hard-coded archive links have been removed. Instagram embeds need internet access and may be blocked by browser privacy settings; each synced post has a direct link fallback.
-
-Use Meta's **Instagram API with Instagram Login** for a **Business or Creator** account. Create a Meta developer app, configure Instagram Login, authorize the metalorix account with the `instagram_business_basic` permission, and obtain its Instagram user ID and access token. Follow the current dashboard requirements for tester roles, review and going live. Do not use the retired Basic Display API or scrape Instagram.
-
-Add to your private `.env`:
+Notifications are disabled by default. They notify **you**, not the submitter, and do not verify the sender's identity. Copy `.env.example` to `.env` and configure:
 
 ```dotenv
-INSTAGRAM_ACCESS_TOKEN=your-token
-INSTAGRAM_USER_ID=your-instagram-user-id
-INSTAGRAM_API_VERSION=v25.0
+IDEA_NOTIFICATIONS_ENABLED=True
+IDEA_NOTIFICATION_EMAIL=your-owner-address@example.com
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=your-provider-smtp-host
+EMAIL_PORT=587
+EMAIL_HOST_USER=your-smtp-user
+EMAIL_HOST_PASSWORD=your-smtp-password-or-app-password
+EMAIL_USE_TLS=True
+DEFAULT_FROM_EMAIL=your-verified-sending-address@example.com
+SITE_URL=http://127.0.0.1:8000
 ```
 
-Confirm the supported Graph API version in your Meta app and change `INSTAGRAM_API_VERSION` if needed. Then run:
+Use your provider's verified sender and SMTP credentials. Do not put credentials in Git or chat. Restart the server after changing `.env`. For a local preview without sending real emails, select `django.core.mail.backends.console.EmailBackend`; the message prints in the server terminal. Set `IDEA_NOTIFICATIONS_ENABLED=False` to stop notifications. Use your real HTTPS domain for SITE_URL in production.
+
+Accepted ideas create an outbox record in the same transaction, then attempt delivery after the transaction commits. Only the configured owner receives the message; user-controlled emails are never used as recipients or From headers. Messages contain the sender, title, song, description and a private admin link, without image attachments.
+
+Review Idea notifications in the admin. SMTP failures do not lose the submission. Retry pending messages with:
 
 ```powershell
-.\.venv\Scripts\python.exe manage.py sync_instagram
+.\.venv\Scripts\python.exe manage.py send_idea_notifications
 ```
 
-Refresh the homepage. The command fetches 25 recent media records, orders them by Instagram publication timestamp (not pinned profile order), and atomically keeps only the newest three. Each new post pushes out the oldest of the three. Subsequent syncs replace the snapshot so deletions are reflected. A failed sync leaves the previous feed intact. Credentials stay server-side. The live connection cannot be verified until your account credentials are configured.
+This command retries at most 20 pending messages per run, with at most three attempts each, and removes expired spam counters. Schedule it hourly on your deployment if automatic retries/cleanup are needed; no scheduler has been created. Successful messages are not resent. A worker interrupted during sending stays marked Sending: investigate delivery with the mail provider before resetting it, because SMTP cannot guarantee exactly-once delivery after an ambiguous connection failure. Sent means the backend accepted the message, not guaranteed inbox delivery; console mode is only a preview.
 
-The Render Blueprint now includes a cron job scheduled every five minutes. This is polling: new posts appear on page load after the next successful sync, not instantly in already-open tabs. Locally, run the sync command again to update the feed. Token renewal is not automated in this starter; refresh/replace tokens per Meta's current instructions and monitor failed cron runs. You can also manage posts manually in the admin, but the next sync replaces that snapshot.
+## Spam and flood controls
 
-Official setup: https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/
+Database-backed counters are shared by all workers and survive cleared cookies and restarts:
 
-## 4. Deploy later: Render + Neon
+- At most 10 POST attempts per IP per 10-minute window, including invalid submissions.
+- At most 120 POST attempts site-wide per minute, checked before form/image parsing.
+- At most 5 accepted submissions per IP per hour and 3 per normalized email per day.
+- At most 50 accepted submissions site-wide per day, limiting owner notification volume.
+- Repeated email + title + song + description combinations are blocked within a daily window, even if images change.
+- Existing one-minute browser-session cooldown, honeypot and CSRF checks remain.
+- Requests declaring over 7 MB are rejected early. Images are limited to three, each 2 MB/16 megapixels, decoded, resized and re-encoded.
 
-Nothing has been deployed or purchased. The included `render.yaml` selects a **paid Starter web service**, supporting the pre-deploy migration command. Review pricing before creating it. It does not create a Render database; the database will be Neon.
+Counters use fixed time windows, so adjacent windows can allow a burst. IP/email keys are stored as secret-keyed hashes. IP limits use the direct peer address and deliberately ignore untrusted forwarding headers. Behind a proxy, visitors may share this address and quota: before public rollout, configure per-visitor rate limiting at the trusted edge and verify its client IP behavior. Do not blindly trust X-Forwarded-For.
 
-1. Push this project to your chosen GitHub repository/branch. Do not commit `.env`, `.venv` or `db.sqlite3`. Your existing GitHub Pages deployment stays separate until you switch your domain. This local repository currently has no remote configured.
-2. Create a Neon PostgreSQL project. Copy its connection string from Connect, including `sslmode=require` (and any other supplied security parameters). A pooled connection is supported; server-side cursors are disabled and persistent connections are off.
-3. In Render, create a Blueprint from the repository containing `render.yaml`. Set `DATABASE_URL` to the Neon connection string. A production secret key is generated by the Blueprint.
-4. Set `ALLOWED_HOSTS` to the eventual Render hostname (without `https://`) and any custom domains, separated by commas. Render's automatic `RENDER_EXTERNAL_HOSTNAME` is also accepted. Set `CSRF_TRUSTED_ORIGINS` to the matching full HTTPS origins, e.g. `https://metalorix.onrender.com,https://metalorix.site`. Use your actual assigned hostname.
-5. Enter Instagram credentials, or leave them blank initially. Keep `DEBUG=False`. The build installs dependencies and collects static assets; pre-deploy applies migrations; Gunicorn serves the app. WhiteNoise serves CSS.
-6. In the Render service shell run `python manage.py createsuperuser`. Visit `/admin/` on the deployed site. SQLite test ideas are not automatically copied to Neon.
-7. The Blueprint includes **metalorix-instagram-sync**, running `python manage.py sync_instagram` every five minutes. Supply the **same Neon DATABASE_URL** and Instagram credentials to both services. Set the same API version if overriding the default. The cron job has its own generated secret key and `DEBUG=False`. Cron jobs incur a separate charge; see https://render.com/docs/cronjobs. After the web service has applied migrations, trigger the cron job once and check its logs. Suspend the cron job until credentials are ready to avoid repeated failures. Do not create a second job if the Blueprint already created it.
-8. Confirm forms, admin images and feed syncing on the Render URL. Then add your custom domain in Render and update DNS as Render instructs. Only switch away from GitHub Pages once the new app works.
+Production (`DEBUG=False`) requires Cloudflare Turnstile verification. Create a Turnstile widget for your exact domain(s) and configure:
 
-References: https://render.com/docs/deploy-django and https://neon.com/docs/guides/django
+```dotenv
+TURNSTILE_SITE_KEY=your-public-site-key
+TURNSTILE_SECRET_KEY=your-private-secret-key
+```
+
+The widget token is checked server-side, including the hostname and action. Missing/invalid tokens and verification outages reject submissions. Local development skips Turnstile unless `TURNSTILE_REQUIRED=True`. Production never bypasses it through that setting. No live Turnstile or SMTP verification has occurred yet because credentials are not configured.
+
+These are submission-abuse controls, not a guarantee against DDoS. Before exposing the form publicly, use hosting/edge protections for connection limits, request-rate limits and a 7 MB body limit (including chunked requests). Application checks run only after traffic reaches the server. Distributed attackers can exhaust a global quota; adjust limits for legitimate traffic and monitor rejections. Public GET traffic also needs edge protection.
+
+References: https://developers.cloudflare.com/turnstile/get-started/server-side-validation/ and https://docs.djangoproject.com/en/5.2/topics/email/
+
+## Render + Neon later
+
+Nothing has been deployed. `render.yaml` defines one paid Starter web service; no Instagram cron job or Render database is created.
+
+1. Push the project to your chosen repository. Never commit `.env`, `.venv`, `db.sqlite3` or secrets.
+2. Create a Neon PostgreSQL database and copy its connection string, including `sslmode=require` and other supplied security parameters.
+3. Create a Render Blueprint from this repository. Set DATABASE_URL to Neon. The Blueprint generates SECRET_KEY and sets DEBUG=False.
+4. Set ALLOWED_HOSTS to your domain names (no scheme), and CSRF_TRUSTED_ORIGINS to their full HTTPS origins. Render's automatic hostname is also accepted.
+5. Configure Turnstile and the email settings above in Render's environment. Keep notifications off if mail is not ready. Without Turnstile keys the public site loads but idea submissions are rejected.
+6. The build installs packages and collects static files. Pre-deploy applies migrations. Gunicorn serves the app. Create your admin account in Render's shell.
+7. Test the public form, rate limits, admin image permissions and real mail delivery before pointing the custom domain to Render. Local SQLite records are not copied to Neon automatically.
 
 ## Checks
 
 ```powershell
 .\.venv\Scripts\python.exe manage.py test
 .\.venv\Scripts\python.exe manage.py check
-.\.venv\Scripts\python.exe manage.py collectstatic --noinput
+.\.venv\Scripts\python.exe manage.py makemigrations --check --dry-run
 ```
 
-Tests cover sender grouping and counts, required identity fields, newest-first selection, empty feed, private images, valid and invalid submissions, CSRF, cooldown, idempotent sync, replacing the oldest post and retaining posts on API failure. Live Instagram, Neon and Render verification requires your credentials and deployment.
+Tests cover sender grouping, images, CSRF, duplicate/cross-session protection, quotas, owner-only notification delivery, bounded retries and Turnstile validation. SMTP, Turnstile and hosting need live configuration and validation before public launch.

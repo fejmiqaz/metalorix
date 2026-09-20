@@ -2,7 +2,17 @@ from django.contrib import admin
 from django.db.models import Count
 from django.urls import reverse
 from django.utils.html import format_html
-from .models import Idea, IdeaImage, InstagramPost, Sender
+from .models import Idea, IdeaImage, InstagramPost, Sender, IdeaNotification
+
+
+@admin.register(IdeaNotification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ['idea', 'status', 'attempts', 'updated_at']
+    readonly_fields = ['idea', 'status', 'attempts', 'updated_at']
+    list_filter = ['status']
+
+    def has_add_permission(self, request):
+        return False
 
 
 class ImageInline(admin.TabularInline):
