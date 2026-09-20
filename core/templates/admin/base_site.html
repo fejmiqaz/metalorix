@@ -1,0 +1,6 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block title %}{{ title }} | metalorix studio{% endblock %}
+{% block branding %}<div id="site-name"><a class="studio-brand" href="{% url 'admin:index' %}"><img src="{% static 'core/logo.svg' %}" width="36" height="36" alt="">metalorix studio</a></div>{% endblock %}
+{% block extrahead %}{{ block.super }}{% include 'core/includes/icons.html' %}{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'core/admin-brand.css' %}">{% endblock %}

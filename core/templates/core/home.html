@@ -4,12 +4,13 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>metalorix — become 1% better every day</title>
+  {% include 'core/includes/icons.html' %}
   <meta name="description" content="An archive of emotion, thought, and atmosphere. Explore metalorix and share an idea for our next post.">
   <link rel="stylesheet" href="{% static 'core/site.css' %}">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header><a class="wordmark" href="#home">metalorix<span>®</span></a><nav aria-label="Main navigation"><a href="#philosophy">Philosophy</a><a href="#feed">The archive</a><a href="#shop">Shop</a><a class="nav-cta" href="#ideas">Share an idea ↗</a></nav></header>
+<header>{% include 'core/includes/brand.html' %}<nav aria-label="Main navigation"><a href="#philosophy">Philosophy</a><a href="#feed">The archive</a><a href="#shop">Shop</a><a class="nav-cta" href="#ideas">Share an idea ↗</a></nav></header>
 <main id="main">
 <section class="hero" id="home">
   <div class="eyebrow"><span class="dot"></span> A little better. A little deeper. Every day.</div>
@@ -44,6 +45,6 @@
 </section>
 <section id="shop" class="section shop"><div class="section-top"><div><p class="eyebrow">04 — Objects with intention</p><h2>Carry the <em>mindset.</em></h2></div><span class="pill">IN DEVELOPMENT</span></div><div class="products"><article><span>01 / EVERYDAY ESSENTIAL</span><h3>Minimalist Logo Tee</h3><p>Premium cotton. A quiet statement.</p><div>$29.99 <small>Coming soon</small></div></article><article><span>02 / GO YOUR OWN WAY</span><h3>Signature Cap</h3><p>A familiar reminder, wherever you go.</p><div>$24.99 <small>Coming soon</small></div></article><article><span>03 / MAKE ROOM TO GROW</span><h3>1% Better Journal</h3><p>Small wins deserve a place on paper.</p><div>$19.99 <small>Coming soon</small></div></article></div></section>
 </main>
-<footer><a class="wordmark" href="#home">metalorix</a><span>become 1% better every day</span><a href="https://www.instagram.com/metalorix/" target="_blank" rel="noopener noreferrer">Let’s connect ↗</a></footer>
+<footer>{% include 'core/includes/brand.html' %}<span>become 1% better every day</span><a href="https://www.instagram.com/metalorix/" target="_blank" rel="noopener noreferrer">Let’s connect ↗</a></footer>
 <script async src="https://www.instagram.com/embed.js"></script>{% if turnstile_required and turnstile_ready %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endif %}
 </body></html>

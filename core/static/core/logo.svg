@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">metalorix</title>
+  <rect width="64" height="64" rx="14" fill="#34241e"/>
+  <text x="32" y="46" text-anchor="middle" font-family="Georgia,serif" font-size="49" fill="#f6f0e4">m</text>
+  <circle cx="51" cy="15" r="4" fill="#a9673a"/>
+</svg>
