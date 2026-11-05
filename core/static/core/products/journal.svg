@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280" fill="none">
+  <ellipse cx="202" cy="246" rx="88" ry="9" fill="#34241e" opacity=".08"/>
+  <circle cx="200" cy="136" r="103" fill="#f6f0e4"/>
+  <path d="m134 57 123-17 18 191-124 15c-12 1-20-6-21-17L117 76c-1-10 5-17 17-19Z" fill="#34241e" stroke="#7c4423" stroke-width="2.5"/>
+  <path d="m145 224 126-16 2 20-124 16c-10 1-14-4-14-9s3-10 10-11Z" fill="#f6f0e4" stroke="#7c4423" stroke-width="2"/>
+  <path d="m142 231 125-16m-124 22 125-16" stroke="#d5bc99" stroke-width="1"/>
+  <path d="m132 54 126-16 17 171-130 17c-8 1-12 4-14 9L115 74c-1-10 5-18 17-20Z" fill="#ede2cd" stroke="#7c4423" stroke-width="2.5"/>
+  <path d="m132 54 16 171-9 3-16-172Z" fill="#a9673a"/>
+  <path d="m239 41 17 170" stroke="#a9673a" stroke-width="6"/>
+  <path d="m214 218 3 35-10-6-8 8-3-35" fill="#a9673a"/>
+  <g transform="rotate(-7 191 139)" fill="#34241e" text-anchor="middle"><text x="191" y="135" font-family="Georgia,serif" font-size="39">1%</text><text x="191" y="155" font-family="monospace" font-size="9" letter-spacing="2">BETTER DAILY</text><path d="M168 168h46" stroke="#a9673a"/><text x="191" y="188" font-family="Georgia,serif" font-size="13">metalorix</text></g>
+</svg>
