@@ -7,17 +7,17 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from .forms import IdeaForm
-from .models import IdeaImage, InstagramPost, Sender, IdeaNotification
+from .models import IdeaImage, Sender, IdeaNotification
 from .protection import reserve_submission, verify_human, reject
 from .notifications import deliver
 
+# Manually selected posts, newest first. No Meta credentials are required.
 ARCHIVE = [{'permalink': f'https://www.instagram.com/p/{code}/'} for code in
-           ['DIwT4qEiE3B', 'DImmbByi5Rl', 'DGJg6diOBUk']]
+           ['DfXR-Qfjq9_', 'DfST_cwjP8v', 'DfQCQnalcyk']]
 
 def home(request, form=None, status=200):
-    posts = list(InstagramPost.objects.all()[:3])
     return render(request, 'core/home.html', {'form': form if form is not None else IdeaForm(),
-                  'posts': posts or ARCHIVE, 'turnstile_site_key': settings.TURNSTILE_SITE_KEY,
+                  'posts': ARCHIVE, 'turnstile_site_key': settings.TURNSTILE_SITE_KEY,
                   'turnstile_ready': bool(settings.TURNSTILE_SITE_KEY and settings.TURNSTILE_SECRET_KEY),
                   'turnstile_required': settings.TURNSTILE_REQUIRED}, status=status)
 

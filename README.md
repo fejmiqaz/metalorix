@@ -18,7 +18,7 @@ Senders shows names, private emails, submission totals, and links to their ideas
 
 ## Instagram: manual archive again
 
-The original three embedded posts are restored when no posts have been entered in the admin. You may manually add posts under Instagram posts (use a unique ID, permalink and publication date); the three newest manual entries appear. The section is labeled as an archive, not a live feed. No Instagram credentials are needed, and the Render sync job has been removed. The old sync command remains dormant for possible future use and is never called automatically.
+The homepage displays the three manually selected Instagram links in `core/views.py`, in the supplied newest-first order. Database entries do not override this selection. No Instagram credentials or scraping are needed. The sync command remains dormant and is not connected to the homepage while manual selection is in use.
 
 ## Optional owner email notifications
 

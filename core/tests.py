@@ -21,13 +21,16 @@ def photo():
 @override_settings(STORAGES={'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
                              'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'}})
 class SiteTests(TestCase):
-    def test_empty_and_latest_three(self):
-        self.assertContains(self.client.get('/'), 'DIwT4qEiE3B')
+    def test_selected_posts_override_old_database_entries(self):
         for i in range(4):
             InstagramPost.objects.create(instagram_id=str(i), permalink=f'https://www.instagram.com/p/test{i}/',
                                          published_at=timezone.now() + timedelta(days=i))
         response = self.client.get('/')
-        self.assertEqual([p.instagram_id for p in response.context['posts']], ['3', '2', '1'])
+        expected = [f'https://www.instagram.com/p/{code}/' for code in
+                    ['DfXR-Qfjq9_', 'DfST_cwjP8v', 'DfQCQnalcyk']]
+        self.assertEqual([p['permalink'] for p in response.context['posts']], expected)
+        for url in expected:
+            self.assertContains(response, f'data-instgrm-permalink="{url}"', count=1)
         self.assertNotContains(response, '/p/test0/')
 
     def test_submission_and_private_image(self):
